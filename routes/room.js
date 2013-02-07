@@ -11,7 +11,7 @@ var Room = function (id, name)
 	this.name = name;
 	this.users = {};
 	this.lines = [];
-}
+};
 
 // Voeg een line toe
 Room.prototype.addLine = function (user, message)
@@ -20,13 +20,13 @@ Room.prototype.addLine = function (user, message)
 
 	console.log(this.name + ' <' + user + '>: ' + message);
 	return true;
-}
+};
 
 // Return alle lines die geschreven zijn
 Room.prototype.getLines = function ()
 {
 	return this.lines;
-}
+};
 
 // Voeg een gebruiker toe aan de room (username string = id)
 Room.prototype.addUser = function (username)
@@ -39,7 +39,7 @@ Room.prototype.addUser = function (username)
 	}
 
 	return false;
-}
+};
 
 // Verwijder een user uit de room
 Room.prototype.delUser = function (username)
@@ -52,13 +52,13 @@ Room.prototype.delUser = function (username)
 	}
 
 	return false;
-}
+};
 
 // Vraag alle users op uit de room
 Room.prototype.getUsers = function ()
 {
 	return this.users;
-}
+};
 
 var rooms = [];
 
@@ -71,7 +71,7 @@ addRoom = function(name)
 
 	return rooms[id];
 
-}
+};
 
 
 
@@ -82,7 +82,7 @@ exports.init = function ()
 	addRoom('DarkRoom');
 
 	console.log(rooms);
-}
+};
 
 exports.get = function (req, res)
 {
@@ -99,14 +99,14 @@ exports.get = function (req, res)
 
 	res.writeHead(header, {'Content-Type': 'application/json'});
 	res.end(msg);
-}
+};
 
 exports.add = function (req, res)
 {
 	res.writeHead(200, {'Content-Type': 'application/json'});
-	res.end(JSON.stringify(addRoom('Room ' + rooms.length.toString())));
+	res.end(JSON.stringify(addRoom('Room ' + new Date().getTime())));
 
-}
+};
 
 exports.list = function (req, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
@@ -115,23 +115,30 @@ exports.list = function (req, res) {
 
 exports.update = function (req, res)
 {
+	var header = 400
+			, msg = '[]'
+			, id = req.params.id
+			, name = req.body.name;
 
-	var header = 500
-		, msg = '[]'
-		, id = req.params.id
-		, name = req.body.name;
-
-	if (name !== undefined && id in rooms)
+	if ('content-type' in req.headers)
 	{
-		rooms[id].name = name;
+		var head = req.headers['content-type'];
 
-		header = 200;
-		msg = JSON.stringify(rooms[id]);
+		if (head.split(';', 1) == 'application/json')
+		{
+			if (name !== undefined && id in rooms)
+			{
+				rooms[id].name = name;
+
+				header = 200;
+				msg = JSON.stringify(rooms[id]);
+			}
+		}
 	}
 
 	res.writeHead(header, {'Content-Type': 'application/json'});
 	res.end(msg);
-}
+};
 
 exports.delete = function (req, res)
 {
@@ -145,7 +152,7 @@ exports.delete = function (req, res)
 	}
 	res.writeHead(header);
 	res.end();
-}
+};
 
 
 exports.addUser = function (req, res)
@@ -174,7 +181,7 @@ exports.addUser = function (req, res)
 
 	res.writeHead(header);
 	res.end();
-}
+};
 
 exports.delUser = function (req, res)
 {
@@ -197,7 +204,7 @@ exports.delUser = function (req, res)
 
 	res.writeHead(header);
 	res.end();
-}
+};
 
 exports.addLine = function (req, res)
 {
@@ -223,7 +230,7 @@ exports.addLine = function (req, res)
 
 	res.writeHead(header);
 	res.end();
-}
+};
 
 exports.getLines = function (req, res)
 {
@@ -242,4 +249,4 @@ exports.getLines = function (req, res)
 	res.writeHead(header, {'Content-Type': 'application/json'});
 	res.end(msg);
 
-}
+};

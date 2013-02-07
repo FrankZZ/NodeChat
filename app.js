@@ -4,7 +4,6 @@
 
 var express = require('express')
 		, routes = require('./routes')
-		, user = require('./routes/user')
 		, room = require('./routes/room')
 		, http = require('http')
 		, path = require('path');
@@ -37,7 +36,7 @@ app.get('/', routes.index);
 app.get('/rooms', room.list);
 
 // Details van een room weergeven
-app.get('/rooms/:id([0-9]+)', room.get);
+app.get('/rooms/:id(\\d+)', room.get);
 
 // Room toevoegen met auto-id en auto-naam
 app.post('/rooms', room.add);
