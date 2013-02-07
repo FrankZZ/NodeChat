@@ -3,15 +3,16 @@
  */
 
 var express = require('express')
-	, routes = require('./routes')
-	, user = require('./routes/user')
-	, room = require('./routes/room')
-	, http = require('http')
-	, path = require('path');
+		, routes = require('./routes')
+		, user = require('./routes/user')
+		, room = require('./routes/room')
+		, http = require('http')
+		, path = require('path');
 
 var app = express();
 
-app.configure(function () {
+app.configure(function ()
+{
 	app.set('port', process.env.PORT || 3000);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
@@ -23,11 +24,14 @@ app.configure(function () {
 	app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function () {
+app.configure('development', function ()
+{
 	app.use(express.errorHandler());
 });
 
 app.get('/', routes.index);
+
+//======== Room functies ==========
 
 // Alle rooms in een lijst weergeven
 app.get('/rooms', room.list);
@@ -39,13 +43,27 @@ app.get('/rooms/:id([0-9]+)', room.get);
 app.post('/rooms', room.add);
 
 // Room verwijderen met meegegeven id
-app.delete('/rooms/:id([0-9]+)', room.delete);
+app.delete('/rooms/:id(\\d+)', room.delete);
 
 // Room updaten met een nieuwe naam
-app.put('/rooms/:id([0-9]+)', room.update);
+app.put('/rooms/:id(\\d+)', room.update);
 
+//======== Chat functies ==========
 
-http.createServer(app).listen(app.get('port'), function () {
+// User toevoegen aan een Room
+app.post('/rooms/:id(\\d+)/users', room.addUser);
+
+// User verwijderen uit een Room
+app.delete('/rooms/:id(\\d+)', room.delUser);
+
+// User een line laten sturen naar een Room
+app.post('/rooms/:id(\\d+)/users/:userid(\\w+)/lines', room.addLine);
+
+// Alle lines van een room weergeven
+app.get('/rooms/:id(\\d+)/lines', room.getLines);
+
+http.createServer(app).listen(app.get('port'), function ()
+{
 	console.log("Express server listening on port " + app.get('port'));
 });
 
