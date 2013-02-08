@@ -1,9 +1,3 @@
-/*
- * GET rooms.
- */
-
-var util = require('util');
-
 // Room klasse
 var Room = function (id, name)
 {
