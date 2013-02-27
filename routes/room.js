@@ -1,58 +1,4 @@
-// Room klasse
-var Room = function (id, name)
-{
-	this.id = id;
-	this.name = name;
-	this.users = {};
-	this.lines = [];
-};
-
-// Voeg een line toe
-Room.prototype.addLine = function (user, message)
-{
-	this.lines.push({"user": user, "message": message});
-
-	console.log(this.name + ' <' + user + '>: ' + message);
-	return true;
-};
-
-// Return alle lines die geschreven zijn
-Room.prototype.getLines = function ()
-{
-	return this.lines;
-};
-
-// Voeg een gebruiker toe aan de room (username string = id)
-Room.prototype.addUser = function (username)
-{
-	if ((username in this.users) == false)
-	{
-		this.users[username] = null;
-
-		return true;
-	}
-
-	return false;
-};
-
-// Verwijder een user uit de room
-Room.prototype.delUser = function (username)
-{
-	if (username in this.users)
-	{
-		delete this.users[username];
-
-		return true;
-	}
-
-	return false;
-};
-
-// Vraag alle users op uit de room
-Room.prototype.getUsers = function ()
-{
-	return this.users;
-};
+var Room = require('../models/room');
 
 var rooms = [];
 
@@ -61,13 +7,28 @@ addRoom = function(name)
 {
 	var id = rooms.length;
 
-	rooms.push(new Room(id, name));
+	rooms.push(Room.new(id, name));
 
 	return rooms[id];
 
 };
 
+getRooms = function()
+{
+	return rooms;
+};
 
+exports.getRooms = getRooms;
+
+deleteRoom = function (id)
+{
+	if (id in rooms)
+	{
+		rooms.splice(id, 1);
+		return true;
+	}
+	return false;
+}
 
 exports.init = function ()
 {
@@ -76,6 +37,8 @@ exports.init = function ()
 	addRoom('DarkRoom');
 
 	console.log(rooms);
+
+	return;
 };
 
 exports.get = function (req, res)
@@ -93,6 +56,8 @@ exports.get = function (req, res)
 
 	res.writeHead(header, {'Content-Type': 'application/json'});
 	res.end(msg);
+
+	return;
 };
 
 exports.add = function (req, res)
@@ -100,11 +65,14 @@ exports.add = function (req, res)
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify(addRoom('Room ' + new Date().getTime())));
 
+	return;
 };
 
 exports.list = function (req, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.end(JSON.stringify(rooms));
+
+	return;
 };
 
 exports.update = function (req, res)
@@ -132,6 +100,9 @@ exports.update = function (req, res)
 
 	res.writeHead(header, {'Content-Type': 'application/json'});
 	res.end(msg);
+
+	return;
+
 };
 
 exports.delete = function (req, res)
@@ -139,13 +110,15 @@ exports.delete = function (req, res)
 	var header = 500
 		, id = req.params.id;
 
-	if (id in rooms)
+	if (deleteRoom(id))
 	{
-		rooms.splice(id, 1);
 		header = 200;
 	}
+
 	res.writeHead(header);
 	res.end();
+
+	return;
 };
 
 
@@ -175,6 +148,8 @@ exports.addUser = function (req, res)
 
 	res.writeHead(header);
 	res.end();
+
+	return;
 };
 
 exports.delUser = function (req, res)
@@ -198,9 +173,11 @@ exports.delUser = function (req, res)
 
 	res.writeHead(header);
 	res.end();
+
+	return;
 };
 
-exports.addLine = function (req, res)
+exports.addLine = function (data)
 {
 		//TODO compleet maken van addLine
 	var roomId = req.params.id
@@ -224,6 +201,8 @@ exports.addLine = function (req, res)
 
 	res.writeHead(header);
 	res.end();
+
+	return;
 };
 
 exports.getLines = function (req, res)
@@ -243,4 +222,27 @@ exports.getLines = function (req, res)
 	res.writeHead(header, {'Content-Type': 'application/json'});
 	res.end(msg);
 
+	return;
 };
+
+exports.index = function (req, res)
+{
+	res.render('index',
+		{
+			'rooms': rooms
+		}
+	);
+}
+
+exports.room = function (req, res)
+{
+	var roomId = req.params.id;
+
+	res.render('room',
+		{
+			'room': rooms[roomId]
+		}
+	);
+
+	return;
+}

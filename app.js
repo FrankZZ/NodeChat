@@ -1,28 +1,35 @@
 var express = require('express')
-		, routes = require('./routes')
-		, room = require('./routes/room')
-		, http = require('http')
-		, path = require('path');
+	, room = require('./routes/room')
+	, path = require('path')
+	, app = express()
+	, http = require('http')
+	, server = http.createServer(app)
+	, io = require('socket.io').listen(server)
+	, fs = require('fs')
+	, sock = require('./models/socket')
+	, client = require('./models/client');
 
-var app = express();
+
 
 app.configure(function ()
 {
 	app.set('port', process.env.PORT || 3000);
-	app.use(express.favicon());
-	app.use(express.logger('dev'));
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'jade');
 	app.use(express.methodOverride());
 	app.use(express.bodyParser());
 	app.use(app.router);
-	app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function ()
+app.get('/', room.index);
+app.get('/room/:id(\\d+)', room.room);
+
+app.get('/client.js', function (req, res)
 {
-	app.use(express.errorHandler());
-});
-
-app.get('/', routes.index);
+	var fileStream = fs.createReadStream('client/client.js');
+	fileStream.pipe(res);
+	return;
+})
 
 //======== Room functies ==========
 
@@ -55,7 +62,14 @@ app.post('/rooms/:id(\\d+)/users/:userid(\\w+)/lines', room.addLine);
 // Alle lines van een room weergeven
 app.get('/rooms/:id(\\d+)/lines', room.getLines);
 
-app.listen(app.get('port'), function ()
+// Nieuwe socket incoming
+io.sockets.on('connection', function (socket)
+{
+	var user = client.new(sock.new(socket));
+	user.room = room.getRooms()[1];
+});
+
+server.listen(app.get('port'), function ()
 {
 	console.log("Express server listening on port " + app.get('port'));
 });

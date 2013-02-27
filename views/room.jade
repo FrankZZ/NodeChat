@@ -1,0 +1,18 @@
+!!! 5
+html
+	head
+		title Room #{room.name} | FWDev ChatAPI 1.0.2
+
+		script(type='text/javascript', src='/socket.io/socket.io.js')
+
+		script(type='text/javascript', src='/client.js')
+
+	body
+		h1 Room #{room.name}
+		form(onsubmit='submitLine(); return false;')
+			input(id='message', type='text')
+			input(type='submit')
+
+		div(id='lines', style='float: left;')
+
+		div(id='userlist', name='userlist', style='float: right;')
