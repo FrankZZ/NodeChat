@@ -47,15 +47,15 @@ appendLine = function (line)
 	var div = document.getElementById('lines');
 	if (line.type == 'm')
 	{
-		div.innerHTML += '<br />&lt;<span style="font-weight: bold">' + line.user + '</span>&gt;: ' + line.message;
+		div.innerHTML = '&lt;<span style="font-weight: bold">' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
 	}
 	else if (line.type == 'j')
 	{
-		div.innerHTML += '<br /><span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span>';
+		div.innerHTML = '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
 	}
 	else if (line.type == 'p')
 	{
-		div.innerHTML += '<br /><span style="color: #ff0000; font-style: italic">' + line.user + ' left</span>';
+		div.innerHTML = '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
 	}
 
 }
