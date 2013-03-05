@@ -9,7 +9,7 @@ html
 
 	body
 		h1 Room #{room.name}
-		form(onsubmit='submitLine(); return false;')
+		form(onsubmit='submitLine(); this.reset(); return false;')
 			input(id='message', type='text')
 			input(type='submit')
 

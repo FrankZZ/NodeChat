@@ -1,4 +1,4 @@
-var socket = io.connect('http://82.169.148.99:3000');
+var socket = io.connect('http://localhost:3000');
 
 socket.on('S_REQUEST_NICK', function ()
 {
