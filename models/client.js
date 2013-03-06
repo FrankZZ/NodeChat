@@ -7,14 +7,18 @@ var Client = function (socket)
 	self.stack = {};
 	self.room = null;
 
-	socket.emit('S_REQUEST_NICK');
+	socket.emit('S_REQUEST_NICK', false);
 
 	socket.on('C_SEND_NICK', function (data)
 	{
 		if ('nick' in data && data.nick.length !== 0)
 		{
 			self.nick = data.nick;
-			self.joinRoom(self.room);
+
+			if (self.joinRoom(self.room) === false)
+			{
+				socket.emit('S_REQUEST_NICK', true);
+			}
 		}
 		socket.emit('OK', 'C_SEND_NICK');
 	});
@@ -32,7 +36,10 @@ Client.prototype.joinRoom = function (room)
 
 	if (self.nick.length !== 0)
 	{
-		room.addUser(self);
+		if (room.addUser(self) === false)
+		{
+			return false;
+		}
 
 		console.log('Joined room ' + room.name);
 
@@ -41,7 +48,7 @@ Client.prototype.joinRoom = function (room)
 			self.room.delUser(self);
 		});
 	}
-
+	return true;
 }
 
 Client.prototype.sendLine = function (line)

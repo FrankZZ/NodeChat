@@ -62,11 +62,16 @@ Room.prototype.addUser = function (user)
 {
 	var self = this;
 
-	for (u in self.users)
+	for (var i = 0; i < self.users.length; i++)
 	{
-		if (u === user)
+		var u = self.users[i];
+
+		if (u !== undefined)
 		{
-			return false;
+			if (u.nick === user.nick)
+			{
+				return false;
+			}
 		}
 	}
 

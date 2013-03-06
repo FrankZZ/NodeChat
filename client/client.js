@@ -47,7 +47,7 @@ appendLine = function (line)
 	var div = document.getElementById('lines');
 	if (line.type == 'm')
 	{
-		div.innerHTML = '&lt;<span style="font-weight: bold">' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
+		div.innerHTML = '&lt;<span style="font-weight: bold">' + formatTime() + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
 	}
 	else if (line.type == 'j')
 	{
