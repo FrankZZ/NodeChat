@@ -47,17 +47,31 @@ appendLine = function (line)
 	var div = document.getElementById('lines');
 	if (line.type == 'm')
 	{
-		div.innerHTML = '&lt;<span style="font-weight: bold">' + formatTime() + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
+		div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
 	}
 	else if (line.type == 'j')
 	{
-		div.innerHTML = '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
+		div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
 	}
 	else if (line.type == 'p')
 	{
-		div.innerHTML = '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
+		div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
 	}
 
+}
+
+formatTime = function (time)
+{
+	return '[' + zeroPad(time.getHours()) + ':' + zeroPad(time.getMinutes()) + ':' + zeroPad(time.getSeconds()) + ']';
+}
+
+zeroPad = function (number)
+{
+	if (number <= 9)
+	{
+		return '0' + number;
+	}
+	return '' + number;
 }
 
 socket.on('S_NEW_LINE', appendLine);
