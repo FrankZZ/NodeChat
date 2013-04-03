@@ -32,6 +32,7 @@ Room.prototype.addLine = function (user, message, type)
 Room.prototype.sendLine = function (line)
 {
 	var self = this;
+	console.log(line.message);
 	self.emit('S_NEW_LINE', line);
 }
 

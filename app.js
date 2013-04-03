@@ -1,5 +1,4 @@
 var express = require('express')
-	, room = require('./routes/room')
 	, path = require('path')
 	, app = express()
 	, http = require('http')
@@ -7,8 +6,10 @@ var express = require('express')
 	, io = require('socket.io').listen(server)
 	, fs = require('fs')
 	, sock = require('./models/socket')
-	, client = require('./models/client');
+	, client = require('./models/client')
+	, roomfactory = require('./models/roomfactory');
 
+roomfactory.init();
 
 app.use(function (req, res, next) 
 {
@@ -25,7 +26,7 @@ app.configure(function ()
 	app.use(app.router);
 });
 
-app.get('/room/:id(\\d+)', room.room);
+/*app.get('/room/:id(\\d+)', room.room);
 
 //======== Room functies ==========
 
@@ -45,7 +46,7 @@ app.delete('/rooms/:id(\\d+)', room.delete);
 app.put('/rooms/:id(\\d+)', room.update);
 
 //======== Chat functies ==========
-/*
+
 // User toevoegen aan een Room
 app.post('/rooms/:id(\\d+)/users', room.addUser);
 
@@ -58,17 +59,13 @@ app.post('/rooms/:id(\\d+)/users/:userid(\\w+)/lines', room.addLine);
 // Alle lines van een room weergeven
 app.get('/rooms/:id(\\d+)/lines', room.getLines);
 */
-
 // Nieuwe socket incoming
 io.sockets.on('connection', function (socket)
 {
 	var user = client.new(sock.new(socket));
-	user.room = room.getRooms()[1];
 });
 
 server.listen(app.get('port'), function ()
 {
 	console.log("Express server listening on port " + app.get('port'));
 });
-
-room.init();

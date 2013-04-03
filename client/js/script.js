@@ -18,6 +18,16 @@
 			socket.emit('C_SEND_NICK', { 'nick': nick });
 		});
 
+		socket.on('S_REQUEST_ROOM', function ()
+		{
+			socket.emit('C_JOIN_ROOM', 1);
+		});
+
+		socket.on('S_JOIN_ROOM', function (data)
+		{
+			$('#room').html(data.name);
+		});
+
 		socket.on('S_SEND_USERLIST', function (data)
 		{
 			var div = document.getElementById('userlist');
@@ -50,18 +60,26 @@
 
 		appendLine = function (line)
 		{
+			var chat = $('#chat')
+
 			var div = document.getElementById('lines');
 			if (line.type == 'm')
 			{
-				div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
+				chat.prepend('<li />').html(formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message);
+
+				//div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
 			}
 			else if (line.type == 'j')
 			{
-				div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
+				chat.prepend('<li />').html(formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span>');
+
+				//div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
 			}
 			else if (line.type == 'p')
 			{
-				div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
+				chat.prepend('<li />').html(formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span>');
+				
+				//div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
 			}
 
 		}

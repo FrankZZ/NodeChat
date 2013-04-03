@@ -1,3 +1,5 @@
+var RoomFactory = require('./roomfactory');
+
 var Client = function (socket)
 {
 	var self = this;
@@ -21,6 +23,16 @@ var Client = function (socket)
 		}
 		
 		socket.emit('OK', 'C_SEND_NICK');
+	});
+
+	socket.on('C_JOIN_ROOM', function(data)
+	{
+		var room = RoomFactory.getRoom(data);
+		
+		if (room)
+		{
+			self.joinRoom(room);
+		}
 	});
 
 	socket.on('C_NEW_LINE', function (data)
