@@ -1,3 +1,61 @@
+/* Body */
 body {
-	
+	padding: 15px;
+	font: 13px Verdana, Tahoma, sans-serif;
+	color: #000;
+}
+
+/* Wrapper */
+#wrapper {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+/* Header */
+#header h1 {
+	font-size: 20px;
+}
+
+/* Main */
+#main {
+	margin: 10px 0;
+}
+
+/* Content */
+#content {
+	float: left;
+	width: 700px;
+	border: 1px solid #000;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+/* Chat */
+#chat {
+	padding: 10px;
+}
+
+/* Sidebar */
+#sidebar {
+	float: right;
+	width: 290px;
+	border: 1px solid #000;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;	
+}
+
+/* Users */
+#users {
+	padding: 10px;
+}
+
+/* Footer */
+#footer {
+	padding: 10px;
+	border: 1px solid #000;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;	
 }
