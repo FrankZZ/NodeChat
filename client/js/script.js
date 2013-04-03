@@ -1,73 +1,85 @@
-var express = require('express')
-	, room = require('./routes/room')
-	, path = require('path')
-	, app = express()
-	, http = require('http')
-	, server = http.createServer(app)
-	, io = require('socket.io').listen(server)
-	, fs = require('fs')
-	, sock = require('./models/socket')
-	, client = require('./models/client');
-
-app.use(function (req, res, next) 
+// Import jQuery into scope.
+(function($)
 {
-	res.header("X-Powered-By", "Frank Wammes en Jim Franke");
-	next();
-});
+	// Dom ready.
+	$(function()
+	{
+		var socket = io.connect('http://localhost:3000');
 
-app.configure(function ()
-{
-	app.set('port', process.env.PORT || 3000);
-	app.use(express.static(__dirname + '/client'));
-	app.use(express.methodOverride());
-	app.use(express.bodyParser());
-	app.use(app.router);
-});
+		socket.on('S_REQUEST_NICK', function ()
+		{
+			var nick = null;
 
-app.get('/room/:id(\\d+)', room.room);
+			while (!nick)
+			{
+				nick = prompt('Input a nickname', 'Guest' + Math.round(Math.random()*100))
+			}
 
-//======== Room functies ==========
+			socket.emit('C_SEND_NICK', { 'nick': nick });
+		});
 
-// Alle rooms in een lijst weergeven
-app.get('/rooms', room.list);
+		socket.on('S_SEND_USERLIST', function (data)
+		{
+			var div = document.getElementById('userlist');
 
-// Details van een room weergeven
-app.get('/rooms/:id(\\d+)', room.get);
+			var ul = document.createElement('ul');
+			for (var i = 0; i < data.length; i++)
+			{
+				var user = data[i];
+				var li = document.createElement('li');
 
-// Room toevoegen met auto-id en auto-naam
-app.post('/rooms', room.add);
+				li.innerHTML = user;
 
-// Room verwijderen met meegegeven id
-app.delete('/rooms/:id(\\d+)', room.delete);
+				ul.appendChild(li);
+			}
 
-// Room updaten met een nieuwe naam
-app.put('/rooms/:id(\\d+)', room.update);
+			while (div.hasChildNodes())
+			{
+				div.removeChild(div.lastChild);
+			}
+			div.appendChild(ul);
+		});
 
-//======== Chat functies ==========
-/*
-// User toevoegen aan een Room
-app.post('/rooms/:id(\\d+)/users', room.addUser);
 
-// User verwijderen uit een Room
-app.delete('/rooms/:id(\\d+)', room.delUser);
+		submitLine = function ()
+		{
+			var input = document.getElementById('message');
 
-// User een line laten sturen naar een Room
-app.post('/rooms/:id(\\d+)/users/:userid(\\w+)/lines', room.addLine);
+			socket.emit('C_NEW_LINE', input.value);
+		}
 
-// Alle lines van een room weergeven
-app.get('/rooms/:id(\\d+)/lines', room.getLines);
-*/
+		appendLine = function (line)
+		{
+			var div = document.getElementById('lines');
+			if (line.type == 'm')
+			{
+				div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
+			}
+			else if (line.type == 'j')
+			{
+				div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
+			}
+			else if (line.type == 'p')
+			{
+				div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
+			}
 
-// Nieuwe socket incoming
-io.sockets.on('connection', function (socket)
-{
-	var user = client.new(sock.new(socket));
-	user.room = room.getRooms()[1];
-});
+		}
 
-server.listen(app.get('port'), function ()
-{
-	console.log("Express server listening on port " + app.get('port'));
-});
+		formatTime = function (time)
+		{
+			return '[' + zeroPad(time.getHours()) + ':' + zeroPad(time.getMinutes()) + ':' + zeroPad(time.getSeconds()) + ']';
+		}
 
-room.init();
+		zeroPad = function (number)
+		{
+			if (number <= 9)
+			{
+				return '0' + number;
+			}
+			return '' + number;
+		}
+
+		socket.on('S_NEW_LINE', appendLine);
+	});
+})(jQuery);
