@@ -9,6 +9,13 @@ var express = require('express')
 	, sock = require('./models/socket')
 	, client = require('./models/client');
 
+
+app.use(function (req, res, next) 
+{
+	res.header("X-Powered-By", "Frank Wammes en Jim Franke");
+	next();
+});
+
 app.configure(function ()
 {
 	app.set('port', process.env.PORT || 3000);
