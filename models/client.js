@@ -7,6 +7,7 @@ var Client = function (socket)
 	self.stack = {};
 	self.room = null;
 
+	// Nick opvragen van client
 	socket.emit('S_REQUEST_NICK', false);
 
 	socket.on('C_SEND_NICK', function (data)
@@ -15,11 +16,10 @@ var Client = function (socket)
 		{
 			self.nick = data.nick;
 
-			if (self.joinRoom(self.room) === false)
-			{
-				socket.emit('S_REQUEST_NICK', true);
-			}
+			// Room opvragen aan client
+			socket.emit('S_REQUEST_ROOM', false);
 		}
+		
 		socket.emit('OK', 'C_SEND_NICK');
 	});
 

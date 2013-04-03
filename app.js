@@ -45,7 +45,7 @@ app.delete('/rooms/:id(\\d+)', room.delete);
 app.put('/rooms/:id(\\d+)', room.update);
 
 //======== Chat functies ==========
-
+/*
 // User toevoegen aan een Room
 app.post('/rooms/:id(\\d+)/users', room.addUser);
 
@@ -57,6 +57,7 @@ app.post('/rooms/:id(\\d+)/users/:userid(\\w+)/lines', room.addLine);
 
 // Alle lines van een room weergeven
 app.get('/rooms/:id(\\d+)/lines', room.getLines);
+*/
 
 // Nieuwe socket incoming
 io.sockets.on('connection', function (socket)
