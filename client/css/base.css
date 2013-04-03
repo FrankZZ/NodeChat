@@ -1,0 +1,71 @@
+@charset "utf-8";
+
+/* Resets */
+html {
+	overflow-y: scroll;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	font: inherit;
+	border: 0;
+	vertical-align: baseline;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+article, aside, details, figcaption, figure, 
+	footer, header, hgroup, menu, nav, section {
+	
+	display: block;
+}
+
+:focus {
+	outline: 0;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+strong {
+	font-weight: bold;
+}
+
+/* Body */
+body {
+	background: #fff;
+	color: #000;
+	line-height: 1;
+	cursor: default;
+}
+
+/* Links */
+a {
+	text-decoration: none;
+}
+
+a[href]:hover {
+	text-decoration: underline;
+}
+
+/* Floats */
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
