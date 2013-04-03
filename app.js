@@ -9,13 +9,10 @@ var express = require('express')
 	, sock = require('./models/socket')
 	, client = require('./models/client');
 
-
-
 app.configure(function ()
 {
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/views');
-	app.set('view engine', 'ejs');
+	app.use(express.static('client'));
 	app.use(express.methodOverride());
 	app.use(express.bodyParser());
 	app.use(app.router);
@@ -23,7 +20,7 @@ app.configure(function ()
 
 app.get('/', room.index);
 app.get('/room/:id(\\d+)', room.room);
-
+/*
 app.get('/client.js', function (req, res)
 {
 	var fileStream = fs.createReadStream('client/client.js');
@@ -31,6 +28,13 @@ app.get('/client.js', function (req, res)
 	return;
 })
 
+app.get('/index.html', function (req, res)
+{
+	var fileStream = fs.createReadStream('client/index.html');
+	fileStream.pipe(res);
+	return;
+})
+*/
 //======== Room functies ==========
 
 // Alle rooms in een lijst weergeven
