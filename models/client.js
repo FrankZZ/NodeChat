@@ -9,10 +9,7 @@ var Client = function (socket)
 	self.stack = {};
 	self.room = null;
 
-	socket.on('connect', function ()
-	{
-		self.requestedRoomList();
-	});
+	self.requestedRoomList();
 
 	socket.on('C_REQUEST_ROOMLIST', function (data)
 	{
