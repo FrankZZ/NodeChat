@@ -54,8 +54,8 @@ Client.prototype.joinRoom = function (room)
 		}
 
 
-		self.socket.emit('S_JOIN_ROOM', room);
-		
+		self.socket.emit('S_JOIN_ROOM', {'name': room.name});
+
 		console.log('Joined room ' + room.name);
 
 		self.socket.on('disconnect', function ()
