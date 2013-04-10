@@ -64,7 +64,7 @@ Client.prototype.joinRoom = function (room)
 
 		var croom = {'name': room.name};
 
-		var croom.userlist = [];
+		croom.userlist = [];
 
 		for (var i = 0; i < room.users.length; i++)
 		{
