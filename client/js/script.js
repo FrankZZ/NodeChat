@@ -23,12 +23,12 @@
 		{
 			socket.on('S_SEND_ROOMLIST', function(data)
 			{
-
+				console.log(data);
 			});
 
 			socket.on('S_JOIN_ROOM', function(data)
 			{
-				console.log('Room: ' + data.name);
+				//console.log(data);
 			});
 
 			socket.on('S_SEND_USERLIST', function(data)
