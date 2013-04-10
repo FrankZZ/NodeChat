@@ -57,7 +57,10 @@ Client.prototype.joinRoom = function (room)
 
 		self.socket.on('disconnect', function ()
 		{
-			self.room.delUser(self);
+			if (self.room)
+			{
+				self.room.delUser(self);
+			}
 		});
 	}
 	return true;
