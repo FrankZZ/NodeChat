@@ -1,103 +1,80 @@
-// Import jQuery into scope.
 (function($)
 {
-	// Dom ready.
 	$(function()
 	{
-		var socket = io.connect('http://localhost:3000');
+		var socket = null,
+			username = null,
+				overlay = $('#overlay'),
+				send = $('#send'),
+			messages = $('#messages'),
+		users = $('#users');
 
-		socket.on('S_REQUEST_NICK', function ()
+		socket = io.connect(document.location.href);
+
+		/* Logon */
+		var logon = function(username, room)
 		{
-			var nick = null;
+			socket.emit('C_SEND_NICK', {'nick': username});
+			socket.emit('C_JOIN_ROOM', room);
+		};
 
-			while (!nick)
+		/* Socket events */
+		(function()
+		{
+			socket.on('S_SEND_ROOMLIST', function(data)
 			{
-				nick = prompt('Input a nickname', 'Guest' + Math.round(Math.random()*100))
-			}
 
-			socket.emit('C_SEND_NICK', { 'nick': nick });
-		});
+			});
 
-		socket.on('S_REQUEST_ROOM', function ()
-		{
-			socket.emit('C_JOIN_ROOM', 1);
-		});
-
-		socket.on('S_JOIN_ROOM', function (data)
-		{
-			$('#room').html(data.name);
-		});
-
-		socket.on('S_SEND_USERLIST', function (data)
-		{
-			var div = document.getElementById('userlist');
-
-			var ul = document.createElement('ul');
-			for (var i = 0; i < data.length; i++)
+			socket.on('S_JOIN_ROOM', function(data)
 			{
-				var user = data[i];
-				var li = document.createElement('li');
+				console.log('Room: ' + data.name);
+			});
 
-				li.innerHTML = user;
-
-				ul.appendChild(li);
-			}
-
-			while (div.hasChildNodes())
+			socket.on('S_SEND_USERLIST', function(data)
 			{
-				div.removeChild(div.lastChild);
-			}
-			div.appendChild(ul);
-		});
+				console.log('Users: ' + data);
+			});
+		})();
 
-
-		submitLine = function ()
+		/* Send */
+		(function()
 		{
-			var input = document.getElementById('message');
+			send.submit(function(e)
+			{
+				e.preventDefault();
 
-			socket.emit('C_NEW_LINE', input.value);
-		}
+				var input = $('input:first', send),
+					message = $.trim(input.val());
 
-		appendLine = function (line)
+				addMessage(username, message);
+
+				input.val('');
+				input.focus();
+			});
+		})();
+
+		/* Overlay */
+		(function()
 		{
-			var chat = $('#chat')
+			socket.emit('');
 
-			var div = document.getElementById('lines');
-			if (line.type == 'm')
+			$('form', overlay).submit(function(e)
 			{
-				chat.prepend('<li />').html(formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message);
+				e.preventDefault();
 
-				//div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + '<span style="font-weight: bold">' + ' &lt;' + line.user + '</span>&gt;: ' + line.message + '<br />' + div.innerHTML;
-			}
-			else if (line.type == 'j')
-			{
-				chat.prepend('<li />').html(formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span>');
+				logon(
+					$('#username', overlay).val(),
+					$('#room', overlay).val()
+				);
 
-				//div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span><br />' + div.innerHTML;
-			}
-			else if (line.type == 'p')
-			{
-				chat.prepend('<li />').html(formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #00ff00; font-style: italic">' + line.user + ' joined</span>');
-				
-				//div.innerHTML = formatTime(new Date(line.timestamp * 1000)) + ' ' + '<span style="color: #ff0000; font-style: italic">' + line.user + ' left</span><br />' + div.innerHTML;
-			}
+				overlay.fadeOut(400, function()
+				{
+					$('input:first', send).focus();
+				});
+			});
+		})();
 
-		}
-
-		formatTime = function (time)
-		{
-			return '[' + zeroPad(time.getHours()) + ':' + zeroPad(time.getMinutes()) + ':' + zeroPad(time.getSeconds()) + ']';
-		}
-
-		zeroPad = function (number)
-		{
-			if (number <= 9)
-			{
-				return '0' + number;
-			}
-			return '' + number;
-		}
-
-		socket.on('S_NEW_LINE', appendLine);
+		$('input:first', overlay).focus();
 	});
 })(jQuery);

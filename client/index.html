@@ -4,33 +4,50 @@
 		<meta charset="utf-8" />
 		<title>Socket Chat</title>
 
-		<link rel="stylesheet" href="./css/base.css" />
-		<link rel="stylesheet" href="./css/style.css" />
+		<link rel="stylesheet" href="/css/base.css" />
+		<link rel="stylesheet" href="/css/style.css" />
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="./js/script.js"></script>
+		<script src="/js/script.js"></script>
 	</head>
 	<body>
+		<div id="overlay">
+			<h1>Inloggen</h1>
+			<form id="setNick">
+				<input name="username" type="text" id="username" maxlength="16" placeholder="Gebruikersnaam" value="" />
+				<select id="room">
+					<option value="1">LightRoom</option>
+				</select>
+				<input type="submit" value="Chatten" />
+			</form>
+		</div>
 		<div id="wrapper">
 			<div id="header">
-				<h1>Socket Chat</h1>
+				<h1>Welkom in de chatroom</h1>
 			</div>
 			<div id="main">
 				<div id="content">
-					<ul id="chat">
-						<li>Dit is een bericht.</li>
-					</ul>
+					<h2>Berichten</h2>
+					<div class="content">
+						<ul id="messages"></ul>
+					</div>
+					<form id="send">
+						<input name="message" type="text" maxlength="100" value="" />
+						<input type="submit" value="Versturen" /> 
+					</form>
 				</div>
 				<div id="sidebar">
-					<ul id="users">
-						<li>Jim</li>
-					</ul>
+					<h2>Gebruikers</h2>
+					<div class="content">
+						<ul id="users"></ul>
+					</div>
 				</div>
 				<div class="clear"></div>
 			</div>
 			<div id="footer">
-				Dit is de footer.
+				WebSocket Chat door 
+					<strong>Jim Franke</strong> &mdash; &copy; 2013
 			</div>
 		</div>
 	</body>

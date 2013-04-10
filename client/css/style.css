@@ -1,19 +1,89 @@
+@charset "utf-8";
+
 /* Body */
 body {
-	padding: 15px;
+	background: #f5f5f5;
+	padding: 60px 0;
 	font: 13px Verdana, Tahoma, sans-serif;
-	color: #000;
+	color: #111;
+}
+
+/* Content */
+.content {
+	padding: 10px;
+}
+
+/* Headings */
+h1 {
+	color: #f06;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+/* Forms */
+input {
+	font-size: 12px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+input[type="text"] {
+	width: 300px;
+	padding: 5px;
+	border: 1px solid #ddd;
+}
+
+select {
+	padding: 3px;
+	border: 1px solid #ddd;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+input[type="submit"] {
+	background: #5a5a5a;
+	padding: 5px 10px;
+	color: #fff;
+	cursor: pointer;	
+}
+
+/* Overlay */
+#overlay {
+	background: inherit;
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99;
+}
+
+#overlay form {
+	margin-top: 10px;
+}
+
+#overlay input[type="text"] {
+	display: block;
+}
+
+#overlay select {
+	width: 150px;
+	margin: 12px 0;
+	display: block;
 }
 
 /* Wrapper */
 #wrapper {
-	width: 1000px;
+	width: 800px;
 	margin: 0 auto;
 }
 
 /* Header */
-#header h1 {
-	font-size: 20px;
+#header {
+	/* Empty */
 }
 
 /* Main */
@@ -21,41 +91,65 @@ body {
 	margin: 10px 0;
 }
 
+#main h2 {
+	background: #5a5a5a;
+	padding: 5px 7px 6px;
+	color: #fff;
+	font-weight: bold;
+}
+
 /* Content */
+#content, #footer {
+	width: 560px;
+}
+
 #content {
 	float: left;
-	width: 700px;
+	background: #fff;
+	height: 600px;
+	position: relative;
 	border: 1px solid #000;
+}
+
+#send {
+	padding: 10px;
+	position: absolute;
+	bottom: 0;
+}
+
+#content, #sidebar {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
+	-moz-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+	box-shadow: 0 0 10px rgba(0, 0, 0, .15);
 }
 
-/* Chat */
-#chat {
-	padding: 10px;
+/* Messages */
+#messages span {
+	font-weight: bold;
+	text-decoration: underline;
 }
+
+#messages .notice {
+	color: #f00;
+	font-weight: bold;
+}
+
+/* Users */
 
 /* Sidebar */
 #sidebar {
 	float: right;
-	width: 290px;
+	background: #fff;
+	width: 220px;
 	border: 1px solid #000;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;	
-}
-
-/* Users */
-#users {
-	padding: 10px;
 }
 
 /* Footer */
 #footer {
-	padding: 10px;
-	border: 1px solid #000;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;	
+	margin: 0;
+	font-size: 11px;
+	text-align: center;
 }
