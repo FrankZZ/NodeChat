@@ -24,9 +24,10 @@ exports.getRoomNames = function ()
 
 	for (var i = 0; i < rooms.length; i++)
 	{
+		var r = rooms[i];
+		
 		if (r)
 		{
-			var r = rooms[i];
 			crooms.push({'name': r.name, 'id': i});
 		}
 	}

@@ -47,7 +47,7 @@ Client.prototype.requestedRoomList = function ()
 {
 	var self = this;
 	
-	self.socket.emit('S_SEND_ROOMLIST', RoomFactory.getRoomNames());
+	self.socket.emit('S_SEND_ROOMLIST', {'rooms': RoomFactory.getRoomNames()});
 };
 
 Client.prototype.joinRoom = function (room)
@@ -75,7 +75,7 @@ Client.prototype.joinRoom = function (room)
 			}
 		}
 
-		self.socket.emit('S_JOIN_ROOM', {'name': croom});
+		self.socket.emit('S_JOIN_ROOM', croom);
 
 		console.log('Joined room ' + room.name);
 
