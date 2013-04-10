@@ -67,7 +67,7 @@ Client.prototype.joinRoom = function (room)
 
 		croom.userlist = [];
 
-		for (var i = 0; i < room.users.length; i++)
+		/*for (var i = 0; i < room.users.length; i++)
 		{
 			var u = room.users[i];
 
@@ -75,7 +75,7 @@ Client.prototype.joinRoom = function (room)
 			{
 				croom.userlist.push(u.nick);
 			}
-		}
+		}*/
 
 		self.socket.emit('S_JOIN_ROOM', croom);
 
