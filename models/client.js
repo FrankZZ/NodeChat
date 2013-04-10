@@ -53,6 +53,8 @@ Client.prototype.requestedRoomList = function ()
 Client.prototype.joinRoom = function (room)
 {
 	var self = this;
+	
+	self.room = room;
 
 	if (self.nick.length !== 0)
 	{
