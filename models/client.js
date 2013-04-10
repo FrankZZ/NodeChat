@@ -49,7 +49,7 @@ var Client = function (socket)
 Client.prototype.requestedRoomList = function ()
 {
 	socket.emit('S_SEND_ROOMLIST', RoomFactory.getRoomNames());
-);
+};
 
 Client.prototype.joinRoom = function (room)
 {
