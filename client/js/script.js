@@ -78,6 +78,7 @@
 			}
 			else if (type == 'j')
 			{
+				addUser(username);
 				li.html('&lt;' + username + '&gt; ' + message);
 			}
 			else if (type == 'p')
