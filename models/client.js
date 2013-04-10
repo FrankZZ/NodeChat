@@ -47,7 +47,7 @@ Client.prototype.requestedRoomList = function ()
 {
 	var self = this;
 	
-	self.socket.emit('S_SEND_ROOMLIST', {'rooms': RoomFactory.getRoomNames()});
+	self.socket.emit('S_SEND_ROOMLIST', RoomFactory.getRoomNames());
 };
 
 Client.prototype.joinRoom = function (room)
