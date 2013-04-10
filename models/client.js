@@ -9,17 +9,21 @@ var Client = function (socket)
 	self.stack = {};
 	self.room = null;
 
-	// Nick opvragen van client
-	socket.emit('S_REQUEST_NICK', false);
+	socket.on('connect', function ()
+	{
+		self.requestedRoomList();
+	});
+
+	socket.on('C_REQUEST_ROOMLIST', function (data)
+	{
+		self.requestedRoomList();
+	});
 
 	socket.on('C_SEND_NICK', function (data)
 	{
 		if ('nick' in data && data.nick.length !== 0)
 		{
 			self.nick = data.nick;
-
-			// Room opvragen aan client
-			socket.emit('S_REQUEST_ROOM', false);
 		}
 		
 		socket.emit('OK', 'C_SEND_NICK');
@@ -42,6 +46,11 @@ var Client = function (socket)
 
 };
 
+Client.prototype.requestedRoomList = function ()
+{
+	socket.emit('S_SEND_ROOMLIST', RoomFactory.getRoomNames();
+});
+
 Client.prototype.joinRoom = function (room)
 {
 	var self = this;
@@ -53,8 +62,21 @@ Client.prototype.joinRoom = function (room)
 			return false;
 		}
 
+		var croom = {'name': room.name};
 
-		self.socket.emit('S_JOIN_ROOM', {'name': room.name});
+		var croom.userlist = [];
+
+		for (var i = 0; i < room.users.length; i++)
+		{
+			var u = room.users[i];
+
+			if (u !== undefined)
+			{
+				croom.userlist.push(u.nick);
+			}
+		}
+
+		self.socket.emit('S_JOIN_ROOM', {'name': croom});
 
 		console.log('Joined room ' + room.name);
 

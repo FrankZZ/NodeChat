@@ -18,6 +18,21 @@ exports.getRooms = function()
 	return rooms;
 };
 
+exports.getRoomNames = function ()
+{
+	var crooms = [];
+
+	for (var i = 0; i < rooms.length; i++)
+	{
+		if (r)
+		{
+			var r = rooms[i];
+			crooms.push({'name': r.name, 'id': i});
+		}
+	}
+	return crooms;
+}
+
 deleteRoom = function (id)
 {
 	if (id in rooms)
