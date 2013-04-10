@@ -65,7 +65,12 @@
 
 		addUser = function(username)
 		{
-			$('<li />').html(username).appendTo(users);
+			$('<li />').html(username).attr('id', 'user' + username).appendTo(users);
+		},
+
+		delUser = function (username)
+		{
+			$('#user' + username).remove();
 		},
 
 		addLine = function(username, timestamp, message, type)
@@ -74,16 +79,17 @@
 
 			if (type == 'm')
 			{
-				li.html('&lt;' + username + '&gt; ' + message);
+				li.html('&lt;' + username + '&gt;: ' + message);
 			}
 			else if (type == 'j')
 			{
 				addUser(username);
-				li.html('&lt;' + username + '&gt; ' + message);
+				li.html('&lt;' + username + '&gt; joined').addClass('notice');
 			}
 			else if (type == 'p')
 			{
-				li.html('&lt;' + username + '&gt; ' + message);
+				delUser(username);
+				li.html('&lt;' + username + '&gt; left').addClass('notice');
 			}
 
 			li.appendTo(messages);
