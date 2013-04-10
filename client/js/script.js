@@ -23,17 +23,17 @@
 		{
 			socket.on('S_SEND_ROOMLIST', function(data)
 			{
-				console.log(data);
+				setRoomOptions(data);
 			});
 
 			socket.on('S_JOIN_ROOM', function(data)
 			{
-				//console.log(data);
+				console.log(data);
 			});
 
 			socket.on('S_SEND_USERLIST', function(data)
 			{
-				console.log('Users: ' + data);
+				//console.log('Users: ' + data);
 			});
 		})();
 
@@ -54,6 +54,19 @@
 			});
 		})();
 
+		var setRoomOptions = function(rooms)
+		{
+			var select = $('#roomlist', overlay);
+
+			for (i in rooms)
+			{
+				var room = rooms[i];
+
+				$('<option />').val(room.id)
+					.text(room.name).appendTo(select);
+			}
+		};
+
 		/* Overlay */
 		(function()
 		{
@@ -65,7 +78,7 @@
 
 				logon(
 					$('#username', overlay).val(),
-					$('#room', overlay).val()
+					$('#roomlist', overlay).val()
 				);
 
 				overlay.fadeOut(400, function()
