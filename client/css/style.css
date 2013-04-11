@@ -134,6 +134,16 @@ input[type="submit"] {
 	text-decoration: underline;
 }
 
+.content {
+	height: 320px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+#messages li {
+	word-wrap: break-word;
+}
+
 #messages .notice {
 	color: #f00;
 	font-weight: bold;

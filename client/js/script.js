@@ -4,10 +4,11 @@
 	{
 		var socket = null,
 			username = null,
-				overlay = $('#overlay'),
-				send = $('#send'),
+			overlay = $('#overlay'),
+			send = $('#send'),
 			messages = $('#messages'),
-		users = $('#users');
+			content = $('.content'),
+			users = $('#users');
 
 		socket = io.connect(document.location.href);
 
@@ -40,13 +41,19 @@
 			{
 				//console.log('Users: ' + data);
 			});
+
+			socket.on('disconnect', function ()
+			{
+				window.setTimeout(function() { location.reload();}, 2000);
+				//location.delay(2000).reload();
+			});
 		})();
 
 		var setRoomOptions = function(rooms)
 		{
 			var select = $('#roomlist', overlay);
 
-			for (i in rooms)
+			for (var i in rooms)
 			{
 				var room = rooms[i];
 
@@ -57,7 +64,7 @@
 
 		setUserlist = function(usernames)
 		{
-			for (i in usernames)
+			for (var i in usernames)
 			{
 				addUser(usernames[i]);
 			}
@@ -79,20 +86,39 @@
 
 			if (type == 'm')
 			{
-				li.html('&lt;' + username + '&gt;: ' + message);
+				li.html(formatTime(new Date(timestamp * 1000)) + ' &lt;' + username + '&gt;: ' + message);
 			}
 			else if (type == 'j')
 			{
 				addUser(username);
-				li.html('&lt;' + username + '&gt; joined').addClass('notice');
+				li.html(formatTime(new Date(timestamp * 1000)) + ' ' + username + ' joined').addClass('notice');
 			}
 			else if (type == 'p')
 			{
 				delUser(username);
-				li.html('&lt;' + username + '&gt; left').addClass('notice');
+				li.html(formatTime(new Date(timestamp * 1000)) + ' ' + username + ' left').addClass('notice');
 			}
 
 			li.appendTo(messages);
+
+			content.stop();
+			content.animate({scrollTop:messages.height()}, 'slow');
+
+		},
+
+
+		formatTime = function (time)
+		{
+			return '[' + zeroPad(time.getHours()) + ':' + zeroPad(time.getMinutes()) + ':' + zeroPad(time.getSeconds()) + ']';
+		},
+
+		zeroPad = function (number)
+		{
+			if (number <= 9)
+			{
+				return '0' + number;
+			}
+			return '' + number;
 		};
 
 		/* Send */
