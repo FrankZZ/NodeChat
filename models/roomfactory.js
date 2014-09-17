@@ -1,4 +1,7 @@
-var Room = require('./room');
+var
+	Room = require('./room'),
+	db = require('./database').client,
+	converter = require('../helpers/converter');
 
 var rooms = [];
 
@@ -6,10 +9,45 @@ var rooms = [];
 addRoom = function(name)
 {
 	var id = rooms.length;
+	var lines = [];
+	var roomParams = {
+		KeyConditions: {
+			roomid: {
+				ComparisonOperator: 'EQ',
+				AttributeValueList: [
+					{
+						S: name
+					}
+				]
+			}
+		},
+		TableName: 'Rooms',
+		AttributesToGet: [
+			'timestamp',
+			'user',
+			'message',
+			'type'
+		]
+	};
 
-	rooms.push(Room.new(id, name));
+	db.query(roomParams, function (err, data)
+	{
+		if (err)
+		{
+			console.log(err, err.stack);
+		}
+		else
+		{
+			console.log(data);
 
-	return rooms[id];
+			lines = converter.ArrayConverter(data.Items);
+		}
+
+		rooms.push(Room.new(id, name, lines));
+		return rooms[id];
+	});
+
+
 
 };
 

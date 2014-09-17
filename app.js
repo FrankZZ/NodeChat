@@ -7,8 +7,11 @@ var express = require('express')
 	, fs = require('fs')
 	, sock = require('./models/socket')
 	, client = require('./models/client')
-	, roomfactory = require('./models/roomfactory');
+	, roomfactory = require('./models/roomfactory')
+	, db = require('./models/database');
 
+
+db.initializeTables();
 roomfactory.init();
 
 app.use(function (req, res, next) 

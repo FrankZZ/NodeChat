@@ -38,7 +38,8 @@ var Client = function (socket)
 
 	socket.on('C_NEW_LINE', function (data)
 	{
-		self.room.addLine(self, data, 'm');
+		if (data && data.length > 0)
+			self.room.addLine(self, data, 'm');
 	});
 
 };

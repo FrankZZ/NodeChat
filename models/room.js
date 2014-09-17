@@ -1,25 +1,55 @@
 // Room klasse
-var Room = function (id, name)
+var db = require('./database').client;
+
+var Room = function (id, name, lines)
 {
 	var self = this;
 
 	self.id = id;
 	self.name = name;
 	self.users = [];
-	self.lines = [];
+	self.lines = lines;
 };
 
 // Voeg een line toe
 Room.prototype.addLine = function (user, message, type)
 {
 	var self = this;
-
+	var timestamp = new Date().getTime();
 	var line = {
 			'user': user.nick,
-			'timestamp': Math.round(new Date().getTime() / 1000),
+			'timestamp': Math.round(timestamp / 1000),
 			'message': message,
 			'type': type
 	};
+
+	var putLineParams = {
+		Item: {
+			roomid: {
+				S: self.name
+			},
+			timestamp: {
+				S: timestamp.toString()
+			},
+			user: {
+				S: user.nick
+			},
+			message: {
+				S: message
+			},
+			type: {
+				S: type
+			}
+		},
+		TableName: 'Rooms'
+	};
+
+	db.putItem(putLineParams, function (err, data)
+	{
+		if (err) console.log(err, err.stack);
+		else console.log(data);
+	})
+
 	self.lines.push(line);
 
 	self.sendLine(line);
@@ -89,7 +119,7 @@ Room.prototype.addUser = function (user)
 		var line = lines[i];
 		user.sendLine(line);
 	}
-	self.addLine(user, '', 'j');
+	self.addLine(user, 'joined', 'j');
 
 	return true;
 };
@@ -122,7 +152,7 @@ Room.prototype.delUser = function (user)
 	{
 		if (self.users[i] === user)
 		{
-			self.addLine(user, '', 'p');
+			self.addLine(user, 'left', 'p');
 			delete self.users[i];
 			self.announceUsers();
 			return true;
@@ -139,13 +169,8 @@ Room.prototype.getUsers = function ()
 	return self.users;
 };
 
-exports.new = function(id, name, persist)
+exports.new = function(id, name, lines)
 {
-	if (persist && persist == true)
-	{
-		//TODO save into db
-	}
-
-	return new Room(id, name);
+	return new Room(id, name, lines);
 }
 
