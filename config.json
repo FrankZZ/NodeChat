@@ -1,0 +1,9 @@
+{
+	"accessKeyId":		"poc",
+	"secretAccessKey":	"dynamodb",
+	"region":			"us-east-1",
+	"apiVersion":
+	{
+		"dynamodb": 		"2012-08-10"
+	}
+}

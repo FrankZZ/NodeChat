@@ -139,7 +139,13 @@ Room.prototype.getUsers = function ()
 	return self.users;
 };
 
-exports.new = function(id, name)
+exports.new = function(id, name, persist)
 {
+	if (persist && persist == true)
+	{
+		//TODO save into db
+	}
+
 	return new Room(id, name);
 }
+
