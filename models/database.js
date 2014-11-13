@@ -2,7 +2,7 @@
 var AWS = require('aws-sdk');
 var roomtable = require('../constants/roomtable');
 
-AWS.config.loadFromPath('./config.json');
+AWS.config.loadFromPath('../config.json');
 
 var dynamodb = new AWS.DynamoDB({ endpoint: new AWS.Endpoint('http://localhost:8000') });
 
